@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "namer",
+  "version": "${version}",
+
+  "name": "namer",
+  "description": "",
+  "authors": [],
+  "contact": {},
+
+  "license": "LGPL-3.0",
+  "icon": "assets/namer/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.chyzman.namer.client.NamerClient"
+    ],
+    "main": [
+      "com.chyzman.namer.Namer"
+    ],
+    "cardinal-components": [
+      "com.chyzman.namer.registry.CardinalComponentsRegistry"
+    ]
+  },
+
+  "mixins": [
+    "namer.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  },
+
+  "custom": {
+    "cardinal-components": [
+      "namer:storage"
+    ]
+  }
+}

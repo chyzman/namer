@@ -1,0 +1,14 @@
+{
+  "command.namer.nick.set.success": "Set your nickname to %s",
+  "command.namer.nick.set.success.other": "Set nickname for %s to %s",
+
+  "command.namer.nick.clear.success": "Cleared your nickname",
+  "command.namer.nick.clear.success.other": "Cleared nickname for %s",
+
+
+  "command.namer.nick.set.fail": "Failed to set your nickname: %s",
+  "command.namer.nick.set.fail.other": "Failed to set nickname for %s: %s",
+
+  "command.namer.nick.set.fail.broken": "Nickname storage is broken",
+  "command.namer.nick.set.fail.unique": "Nickname must be unique"
+}
