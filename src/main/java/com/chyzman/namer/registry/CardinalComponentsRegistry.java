@@ -1,6 +1,6 @@
 package com.chyzman.namer.registry;
 
-import com.chyzman.namer.cca.component.NickStorage;
+import com.chyzman.namer.cca.NickStorage;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.scoreboard.ScoreboardComponentFactoryRegistry;

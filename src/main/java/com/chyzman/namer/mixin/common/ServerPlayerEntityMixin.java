@@ -1,5 +1,6 @@
 package com.chyzman.namer.mixin.common;
 
+import com.chyzman.namer.util.NickFormatter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -30,6 +31,6 @@ public abstract class ServerPlayerEntityMixin extends Entity {
         var nick = storage.getNick((ServerPlayerEntity) (Object) this);
         if (nick == null) return;
 
-        cir.setReturnValue(nick.copy().append("(").append(getName()).append(")"));
+        cir.setReturnValue(NickFormatter.nickAndName(nick, getDisplayName()));
     }
 }

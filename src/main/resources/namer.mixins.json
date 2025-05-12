@@ -4,11 +4,13 @@
   "package": "com.chyzman.namer.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "common.EntitySelectorMixin",
-    "common.EntitySelectorReaderMixin",
+    "common.CommandSourceMixin",
+    "common.EntityArgumentTypeMixin",
     "common.PlayerEntityMixin",
-    "common.PlayerManagerMixin",
-    "common.ServerPlayerEntityMixin"
+    "common.ServerCommandSourceMixin",
+    "common.ServerPlayerEntityMixin",
+    "common.SuggestionMixin",
+    "common.SuggestionsBuilderAccessor"
   ],
   "client": [
     "client.ClientCommandSourceMixin"

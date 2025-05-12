@@ -1,10 +1,13 @@
 package com.chyzman.namer.mixin.client;
 
 
-import com.chyzman.namer.cca.component.NickStorage;
+import com.chyzman.namer.cca.NickStorage;
+import com.chyzman.namer.impl.NickSuggestion;
+import com.chyzman.namer.pond.CommandSourceDuck;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,19 +21,20 @@ import java.util.List;
 import static com.chyzman.namer.registry.CardinalComponentsRegistry.NICK_STORAGE;
 
 @Mixin(ClientCommandSource.class)
-public abstract class ClientCommandSourceMixin {
+public abstract class ClientCommandSourceMixin implements CommandSourceDuck {
     @Shadow @Final private ClientPlayNetworkHandler networkHandler;
 
-    @Inject(method = "getPlayerNames", at = @At(value = "RETURN"), cancellable = true)
-    private void addNicksToSuggestions(CallbackInfoReturnable<Collection<String>> cir, @Local List<String> list) {
+    @Override
+    public List<NickSuggestion.Data> namer$getNickSuggestionData() {
         var storage = NICK_STORAGE.getNullable(networkHandler.getWorld().getScoreboard());
-        if (storage == null) return;
-
-        var uuids = networkHandler.getPlayerList().stream().map(playerListEntry -> playerListEntry.getProfile().getId()).toList();
-
-        storage.allNicks().forEach((uuid, nick) -> {
-            if (uuids.contains(uuid)) list.add(NickStorage.formatForCommand(nick));
-        });
-        cir.setReturnValue(list);
+        return networkHandler.getPlayerList().stream()
+            .map(playerListEntry -> {
+                var profile = playerListEntry.getProfile();
+                return new NickSuggestion.Data(
+                    Text.literal(profile.getName()),
+                    storage == null ? null : storage.getNick(profile.getId())
+                );
+            })
+            .toList();
     }
 }
