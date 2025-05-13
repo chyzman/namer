@@ -15,6 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
+
+import static net.minecraft.command.CommandSource.shouldSuggest;
 
 @Mixin(EntityArgumentType.class)
 public abstract class EntityArgumentTypeMixin {
@@ -33,9 +36,8 @@ public abstract class EntityArgumentTypeMixin {
         var nickData = ((CommandSourceDuck) source).namer$getNickSuggestionData();
         if (nickData.isEmpty()) return;
         for (NickSuggestion.Data data : nickData) {
-            ((SuggestionsBuilderAccessor) builder).namer$getResult().add(
-                new NickSuggestion(StringRange.between(builder.getStart(), builder.getInput().length()), data)
-            );
+            var remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+            if (shouldSuggest(remaining, data.nameString().toLowerCase(Locale.ROOT)) || shouldSuggest(remaining, data.nickString().toLowerCase(Locale.ROOT))) ((SuggestionsBuilderAccessor) builder).namer$getResult().add(new NickSuggestion(StringRange.between(builder.getStart(), builder.getInput().length()), data));
         }
     }
 }

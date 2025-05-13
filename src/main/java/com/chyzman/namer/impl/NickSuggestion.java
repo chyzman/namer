@@ -4,6 +4,7 @@ import com.chyzman.namer.util.NickFormatter;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.suggestion.Suggestion;
+import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 

@@ -10,6 +10,6 @@ import java.util.List;
 @Mixin(SuggestionsBuilder.class)
 public interface SuggestionsBuilderAccessor {
 
-    @Accessor("result")
+    @Accessor(value = "result", remap = false)
     List<Suggestion> namer$getResult();
 }

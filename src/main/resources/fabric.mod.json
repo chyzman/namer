@@ -2,10 +2,11 @@
   "schemaVersion": 1,
   "id": "namer",
   "version": "${version}",
-
-  "name": "namer",
-  "description": "",
-  "authors": [],
+  "name": "Namer",
+  "description": "Simple Nicknames that are simply better™",
+  "authors": [
+    "chyzman"
+  ],
   "contact": {},
 
   "license": "LGPL-3.0",
@@ -13,9 +14,6 @@
 
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "com.chyzman.namer.client.NamerClient"
-    ],
     "main": [
       "com.chyzman.namer.Namer"
     ],
@@ -31,7 +29,8 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": ">=${minecraft_version}",
+    "owo": "*"
   },
 
   "custom": {

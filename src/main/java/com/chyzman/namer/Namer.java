@@ -7,8 +7,6 @@ import net.minecraft.util.Identifier;
 public class Namer implements ModInitializer {
     public static final String MODID = "namer";
 
-    public static final Identifier SELECTING_BY_NICK_FLAG = id("selecting_by_nickname");
-
     @Override
     public void onInitialize() {
         NickCommand.register();

@@ -31,6 +31,6 @@ public abstract class ServerPlayerEntityMixin extends Entity {
         var nick = storage.getNick((ServerPlayerEntity) (Object) this);
         if (nick == null) return;
 
-        cir.setReturnValue(NickFormatter.nickAndName(nick, getDisplayName()));
+        cir.setReturnValue(NickFormatter.nickAndName(nick, getName()));
     }
 }
