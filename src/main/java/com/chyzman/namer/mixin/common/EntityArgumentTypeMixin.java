@@ -1,9 +1,10 @@
 package com.chyzman.namer.mixin.common;
 
-import com.chyzman.namer.impl.NickSuggestion;
+import com.chyzman.namer.impl.AdvancedSuggestion;
+import com.chyzman.namer.impl.NickSuggestionData;
 import com.chyzman.namer.pond.CommandSourceDuck;
+import com.chyzman.namer.util.NickFormatter;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.command.CommandSource;
@@ -35,9 +36,21 @@ public abstract class EntityArgumentTypeMixin {
     ) {
         var nickData = ((CommandSourceDuck) source).namer$getNickSuggestionData();
         if (nickData.isEmpty()) return;
-        for (NickSuggestion.Data data : nickData) {
+        for (NickSuggestionData data : nickData) {
             var remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-            if (shouldSuggest(remaining, data.nameString().toLowerCase(Locale.ROOT)) || shouldSuggest(remaining, data.nickString().toLowerCase(Locale.ROOT))) ((SuggestionsBuilderAccessor) builder).namer$getResult().add(new NickSuggestion(StringRange.between(builder.getStart(), builder.getInput().length()), data));
+            var aliases = new ArrayList<String>();
+            aliases.add(data.name().getString().toLowerCase(Locale.ROOT));
+            if (data.nick() != null) aliases.add(data.nick().getString().toLowerCase(Locale.ROOT));
+            if (aliases.stream().anyMatch(string -> shouldSuggest(remaining, string))) {
+                ((SuggestionsBuilderAccessor) builder).namer$getResult().add(
+                    new AdvancedSuggestion(
+                        StringRange.between(builder.getStart(), builder.getInput().length()),
+                        NickFormatter.nickAndName(data.nick(), data.name()).getString(),
+                        data.name().getString(),
+                        aliases
+                    )
+                );
+            }
         }
     }
 }

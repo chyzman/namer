@@ -1,5 +1,6 @@
 package com.chyzman.namer.mixin.common;
 
+import com.chyzman.namer.pond.PlayerEntityDuck;
 import com.chyzman.namer.util.NickFormatter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -28,9 +29,9 @@ public abstract class ServerPlayerEntityMixin extends Entity {
         var storage = NICK_STORAGE.getNullable(scoreboard);
         if (storage == null) return;
 
-        var nick = storage.getNick((ServerPlayerEntity) (Object) this);
+        var nick = storage.getNick(getUuid());
         if (nick == null) return;
 
-        cir.setReturnValue(NickFormatter.nickAndName(nick, getName()));
+        cir.setReturnValue(NickFormatter.nickAndName(nick, ((PlayerEntityDuck)this).namer$getActualDisplayName()));
     }
 }

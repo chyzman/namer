@@ -1,7 +1,7 @@
 package com.chyzman.namer.mixin.common;
 
 
-import com.chyzman.namer.impl.NickSuggestion;
+import com.chyzman.namer.impl.NickSuggestionData;
 import com.chyzman.namer.pond.CommandSourceDuck;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
@@ -16,9 +16,9 @@ public interface CommandSourceMixin extends CommandSourceDuck {
     @Shadow Collection<String> getPlayerNames();
 
     @Override
-    default List<NickSuggestion.Data> namer$getNickSuggestionData() {
+    default List<NickSuggestionData> namer$getNickSuggestionData() {
         return getPlayerNames().stream()
-            .map(playerName -> new NickSuggestion.Data(Text.literal(playerName), null))
+            .map(playerName -> new NickSuggestionData(Text.literal(playerName), null))
             .toList();
     }
 }
