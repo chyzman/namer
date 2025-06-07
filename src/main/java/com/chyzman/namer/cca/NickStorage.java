@@ -1,5 +1,7 @@
 package com.chyzman.namer.cca;
 
+import com.chyzman.namer.util.NickFormatter;
+import eu.pb4.placeholders.api.PlaceholderContext;
 import io.wispforest.endec.Endec;
 import io.wispforest.endec.impl.BuiltInEndecs;
 import io.wispforest.endec.impl.KeyedEndec;
@@ -28,11 +30,11 @@ public class NickStorage implements Component, AutoSyncedComponent {
     private final Scoreboard holder;
     @Nullable
     public final MinecraftServer server;
-    private HashMap<UUID, Text> nicks = new HashMap<>();
+    private HashMap<UUID, String> nicks = new HashMap<>();
 
     //region ENDEC STUFF
 
-    private static final KeyedEndec<HashMap<UUID, Text>> NICKS = Endec.map(BuiltInEndecs.UUID, MinecraftEndecs.TEXT).xmap(HashMap::new, hashMap -> hashMap).keyed("nicks", new HashMap<>());
+    private static final KeyedEndec<HashMap<UUID, String>> NICKS = Endec.map(BuiltInEndecs.UUID, Endec.STRING).xmap(HashMap::new, hashMap -> hashMap).keyed("nicks", new HashMap<>());
 
     @Override
     public void readFromNbt(NbtCompound tag, @NotNull RegistryWrapper.WrapperLookup registryLookup) {
@@ -51,7 +53,7 @@ public class NickStorage implements Component, AutoSyncedComponent {
         this.server = server;
     }
 
-    public void setNick(ServerPlayerEntity player, Text nick) {
+    public void setNick(ServerPlayerEntity player, String nick) {
         this.nicks.put(player.getUuid(), nick);
         syncPlayerNick(player);
     }
@@ -61,7 +63,7 @@ public class NickStorage implements Component, AutoSyncedComponent {
         syncPlayerNick(player);
     }
 
-    private void syncPlayerNick(ServerPlayerEntity player) {
+    public void syncPlayerNick(ServerPlayerEntity player) {
         NICK_STORAGE.sync(holder);
         if (server == null) return;
         Objects.requireNonNull(server).getPlayerManager().sendToAll(new PlayerListS2CPacket(PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME, player));
@@ -69,11 +71,7 @@ public class NickStorage implements Component, AutoSyncedComponent {
 
     @Nullable
     public Text getNick(UUID uuid) {
-        return this.nicks.get(uuid);
-    }
-
-    @Nullable
-    public Text getNick(PlayerEntity player) {
-        return getNick(player.getUuid());
+        var nick = this.nicks.get(uuid);
+        return nick == null ? null : NickFormatter.parseNick(nick);
     }
 }

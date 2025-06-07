@@ -5,6 +5,18 @@
   "command.namer.nick.clear.success": "Cleared your nickname",
   "command.namer.nick.clear.success.other": "Cleared nickname for %s",
 
-  "command.namer.nick.set.fail": "Failed to set your nickname",
-  "command.namer.nick.set.fail.other": "Failed to set nickname for %s"
+  "command.namer.nick.set.fail": "Failed to set your nickname: %s",
+  "command.namer.nick.set.fail.other": "Failed to set nickname for %s: %s",
+
+  "command.namer.nick.set.fail.unknown": "Unknown error occurred while setting your nickname",
+  "command.namer.nick.set.fail.length": "Nickname \"%s\" is longer that max nickname length (%s)",
+
+
+  "text.config.namer.title": "Namer Configuration",
+
+  "text.config.namer.option.maxNickLength": "Max Nickname Length",
+  "text.config.namer.option.maxNickLength.tooltip": "The maximum length of a nickname. Set to 0 for no limit.",
+
+  "text.config.namer.option.allowNickFormatting": "Allow Nickname Formatting",
+  "text.config.namer.option.allowNickFormatting.tooltip": "If enabled, players can use placeholder api formatting in their nicknames"
 }
