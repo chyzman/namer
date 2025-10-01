@@ -1,18 +1,17 @@
 package com.chyzman.namer.cca;
 
 import com.chyzman.namer.util.NickFormatter;
-import eu.pb4.placeholders.api.PlaceholderContext;
 import io.wispforest.endec.Endec;
 import io.wispforest.endec.impl.BuiltInEndecs;
-import io.wispforest.endec.impl.KeyedEndec;
-import io.wispforest.owo.serialization.endec.MinecraftEndecs;
-import net.minecraft.entity.player.PlayerEntity;
+import io.wispforest.owo.serialization.CodecUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +19,6 @@ import org.ladysnake.cca.api.v3.component.Component;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,16 +32,16 @@ public class NickStorage implements Component, AutoSyncedComponent {
 
     //region ENDEC STUFF
 
-    private static final KeyedEndec<HashMap<UUID, String>> NICKS = Endec.map(BuiltInEndecs.UUID, Endec.STRING).xmap(HashMap::new, hashMap -> hashMap).keyed("nicks", new HashMap<>());
+    private static final Endec<HashMap<UUID, String>> ENDEC = Endec.map(BuiltInEndecs.UUID, Endec.STRING).xmap(HashMap::new, hashMap -> hashMap);
 
     @Override
-    public void readFromNbt(NbtCompound tag, @NotNull RegistryWrapper.WrapperLookup registryLookup) {
-        this.nicks = tag.get(NICKS);
+    public void readData(ReadView readView) {
+        this.nicks = readView.read("nicks", CodecUtils.toCodec(ENDEC)).orElse(new HashMap<>());
     }
 
     @Override
-    public void writeToNbt(NbtCompound tag, @NotNull RegistryWrapper.WrapperLookup registryLookup) {
-        tag.put(NICKS, this.nicks);
+    public void writeData(WriteView writeView) {
+        writeView.put("nicks", CodecUtils.toCodec(ENDEC), this.nicks);
     }
 
     //endregion
