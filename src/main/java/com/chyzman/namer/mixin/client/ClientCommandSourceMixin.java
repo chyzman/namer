@@ -36,8 +36,8 @@ public abstract class ClientCommandSourceMixin implements CommandSourceDuck {
         return networkHandler.getPlayerList().stream()
             .map(playerListEntry -> {
                 var profile = playerListEntry.getProfile();
-                var nick = storage == null ? null : storage.getNick(profile.getId());
-                return new NickSuggestionData(Text.literal(profile.getName()), nick);
+                var nick = storage == null ? null : storage.getNick(profile.id());
+                return new NickSuggestionData(Text.literal(profile.name()), nick);
             })
             .toList();
     }
@@ -49,7 +49,7 @@ public abstract class ClientCommandSourceMixin implements CommandSourceDuck {
         if (storage == null) return originalResult;
         originalResult.addAll(
             networkHandler.getPlayerList().stream()
-                .map(playerListEntry -> storage.getNick(playerListEntry.getProfile().getId()))
+                .map(playerListEntry -> storage.getNick(playerListEntry.getProfile().id()))
                 .filter(Objects::nonNull)
                 .map(Text::getString)
                 .toList()

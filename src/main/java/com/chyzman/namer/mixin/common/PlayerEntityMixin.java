@@ -24,16 +24,15 @@ public abstract class PlayerEntityMixin extends Entity implements PlayerEntityDu
         super(type, world);
     }
 
-    @Shadow public abstract Scoreboard getScoreboard();
-
     @Shadow public abstract Text getDisplayName();
 
     @ModifyExpressionValue(method = "getDisplayName", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getName()Lnet/minecraft/text/Text;"))
     private Text makeNicksWork(Text original) {
         if (ignoreNick) return original;
-        if (getScoreboard() == null) return original;
+        var scoreboard = getEntityWorld().getScoreboard();
+        if (scoreboard == null) return original;
 
-        var storage = NICK_STORAGE.getNullable(getScoreboard());
+        var storage = NICK_STORAGE.getNullable(scoreboard);
         if (storage == null) return original;
 
         var nick = storage.getNick(getUuid());
